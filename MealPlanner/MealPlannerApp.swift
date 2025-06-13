@@ -1,10 +1,3 @@
-//
-//  MealPlannerApp.swift
-//  MealPlanner
-//
-//  Created by Grażyna Marzec on 13/06/2025.
-//
-
 import SwiftUI
 
 @main
@@ -13,7 +6,7 @@ struct MealPlannerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

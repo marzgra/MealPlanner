@@ -1,8 +1,10 @@
-//
-//  ShoppingListView.swift
-//  MealPlanner
-//
-//  Created by Grażyna Marzec on 13/06/2025.
-//
+import SwiftUI
 
-import Foundation
+struct ShoppingListView: View {
+    var body: some View {
+        NavigationView {
+            Text("🧂 Tu będzie lista zakupów")
+                .navigationTitle("Zakupy")
+        }
+    }
+}

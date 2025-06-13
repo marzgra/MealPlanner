@@ -1,8 +1,10 @@
-//
-//  MealPlanView.swift
-//  MealPlanner
-//
-//  Created by Grażyna Marzec on 13/06/2025.
-//
+import SwiftUI
 
-import Foundation
+struct MealPlanView: View {
+    var body: some View {
+        NavigationView {
+            Text("🧂 Tu będzie plan")
+                .navigationTitle("Menu")
+        }
+    }
+}
