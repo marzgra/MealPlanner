@@ -4,7 +4,8 @@ import CoreData
 struct PantryView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.category, ascending: true), NSSortDescriptor(keyPath: \.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.category, ascending: true),
+                          NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
         animation: .default)
     private var ingredients: FetchedResults<Ingredient>
 
@@ -45,7 +46,7 @@ struct PantryView: View {
     }
 
     private var groupedIngredients: [String: [Ingredient]] {
-        Dictionary(grouping: ingredients) { $0.category ?? "Inne" }
+        Dictionary(grouping: ingredients) { $0.category }
     }
 
     private func deleteIngredients(offsets: IndexSet, category: String) {
@@ -70,7 +71,7 @@ struct IngredientRow: View {
         HStack {
             Text(ingredient.name)
             Spacer()
-            Text("\(ingredient.quantity, specifier: "%.0f") \(ingredient.unit ?? "")")
+            Text("\(ingredient.quantity, specifier: "%.0f") \(ingredient.unit)")
             if let expiryDate = ingredient.expiryDate {
                 Text("\(expiryDate, formatter: itemFormatter)")
                     .font(.caption)

@@ -4,7 +4,7 @@ import CoreData
 struct WeeklyMenuView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.date, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \MealPlan.date, ascending: true)],
         animation: .default)
     private var mealPlans: FetchedResults<MealPlan>
 
@@ -77,9 +77,9 @@ struct DayCell: View {
 
     var body: some View {
         VStack {
-            Text(date, format: .dateTime(.weekday(.short)))
+            Text(date, format: Date.FormatStyle().weekday(.short))
                 .font(.caption)
-            Text(date, format: .dateTime(.day))
+            Text(date, format: .dateTime.day())
                 .font(.title2)
         }
         .padding(8)

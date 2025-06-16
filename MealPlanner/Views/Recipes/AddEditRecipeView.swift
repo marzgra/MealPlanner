@@ -31,7 +31,7 @@ struct AddEditRecipeView: View {
         _tags = State(initialValue: recipe?.tags ?? "")
 
         if let existingIngredients = recipe?.ingredients as? Set<RecipeIngredient> {
-            _recipeIngredients = State(initialValue: existingIngredients.map { RecipeIngredientForm(id: UUID(), name: $0.name, quantity: String($0.quantity), unit: $0.unit ?? "sztuki") })
+            _recipeIngredients = State(initialValue: existingIngredients.map { RecipeIngredientForm(id: UUID(), name: $0.name, quantity: String($0.quantity), unit: $0.unit) })
         }
     }
 

@@ -15,9 +15,11 @@ struct AddEditMealPlanView: View {
     @State private var useCustomMeal: Bool = false
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.name, ascending: true)],
-        animation: .default)
+        sortDescriptors: [NSSortDescriptor(keyPath: \Recipe.name, ascending: true)],
+        animation: .default
+    )
     private var recipes: FetchedResults<Recipe>
+
 
     init(mealPlan: MealPlan? = nil, selectedDate: Date, mealType: String = "") {
         self.mealPlan = mealPlan
@@ -46,7 +48,7 @@ struct AddEditMealPlanView: View {
                     Picker("Wybierz przepis", selection: $selectedRecipe) {
                         Text("Brak").tag(nil as Recipe?)
                         ForEach(recipes, id: \.self) {
-                            Text($0.name ?? "Nieznany przepis").tag($0 as Recipe?)
+                            Text($0.name).tag($0 as Recipe?)
                         }
                     }
                 }

@@ -3,7 +3,7 @@ import Foundation
 import CoreData
 
 @objc(Recipe)
-public class Recipe: NSManagedObject {
+public class Recipe: NSManagedObject, Identifiable {
     @NSManaged public var name: String
     @NSManaged public var preparationSteps: String
     @NSManaged public var servings: Int16

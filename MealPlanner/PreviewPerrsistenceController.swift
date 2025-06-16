@@ -1,8 +1,17 @@
-//
-//  PreviewPerrsistenceController.swift
-//  MealPlanner
-//
-//  Created by Grażyna Marzec on 13/06/2025.
-//
+import CoreData
 
-import Foundation
+struct PreviewPersistenceController {
+    static let shared: PersistenceController = {
+        let controller = PersistenceController(inMemory: true)
+
+        let viewContext = controller.container.viewContext
+
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Błąd zapisu danych preview: \(error)")
+        }
+
+        return controller
+    }()
+}

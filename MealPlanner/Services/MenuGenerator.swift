@@ -34,7 +34,7 @@ class MenuGenerator {
                 let newMealPlan = MealPlan(context: viewContext)
                 newMealPlan.date = currentDay
                 newMealPlan.mealType = mealType
-                newMealPlan.customMealName = "Wygenerowany posiłek (\[mealType])"
+                newMealPlan.customMealName = "Wygenerowany posiłek (\\[mealType])"
             }
         }
 

@@ -1,45 +1,35 @@
-
 import SwiftUI
 import CoreData
 
 struct GenerateShoppingListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
-
+    
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.date, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \MealPlan.date, ascending: true)],
         animation: .default)
     private var mealPlans: FetchedResults<MealPlan>
-
+    
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Ingredient.name, ascending: true)],
         animation: .default)
     private var pantryIngredients: FetchedResults<Ingredient>
-
+    
     @State private var selectedMealPlans: Set<MealPlan> = []
     @State private var shoppingListPreview: [ShoppingListItemPreview] = []
-
+    
     var body: some View {
         NavigationView {
             VStack {
                 List {
                     Section(header: Text("Wybierz posiłki do uwzględnienia")) {
                         ForEach(mealPlans) { mealPlan in
-                            Toggle(isOn: Binding(
-                                get: { selectedMealPlans.contains(mealPlan) },
-                                set: { isSelected in
-                                    if isSelected {
-                                        selectedMealPlans.insert(mealPlan)
-                                    } else {
-                                        selectedMealPlans.remove(mealPlan)
-                                    }
-                                }
-                            )) {
+                            Toggle(isOn: bindingForMealPlan(mealPlan)) {
                                 Text("\(mealPlan.mealType) - \(mealPlan.recipe?.name ?? mealPlan.customMealName ?? "Brak") (\(mealPlan.date, formatter: itemFormatter))")
                             }
                         }
                     }
-
+                    
                     Section(header: Text("Podgląd listy zakupów")) {
                         if shoppingListPreview.isEmpty {
                             Text("Wybierz posiłki, aby wygenerować podgląd.")
@@ -60,7 +50,7 @@ struct GenerateShoppingListView: View {
                         }
                     }
                 }
-
+                
                 Button("Generuj listę zakupów") {
                     generateShoppingList()
                 }
@@ -82,23 +72,36 @@ struct GenerateShoppingListView: View {
             }
         }
     }
-
+    
+    private func bindingForMealPlan(_ mealPlan: MealPlan) -> Binding<Bool> {
+        Binding(
+            get: { selectedMealPlans.contains(mealPlan) },
+            set: { isSelected in
+                if isSelected {
+                    selectedMealPlans.insert(mealPlan)
+                } else {
+                    selectedMealPlans.remove(mealPlan)
+                }
+            }
+        )
+    }
+    
     private func updateShoppingListPreview() {
         var combinedIngredients: [String: ShoppingListItemPreview] = [:]
-
+        
         for mealPlan in selectedMealPlans {
             if let recipe = mealPlan.recipe {
                 if let recipeIngredients = recipe.ingredients as? Set<RecipeIngredient> {
                     for recipeIngredient in recipeIngredients {
-                        let key = "\(recipeIngredient.name)-\(recipeIngredient.unit ?? "")"
+                        let key = "\(recipeIngredient.name)-\(recipeIngredient.unit)"
                         let inPantry = pantryIngredients.contains(where: { $0.name == recipeIngredient.name && $0.unit == recipeIngredient.unit && $0.quantity >= recipeIngredient.quantity })
-
-                        if let existing = combinedIngredients[key] {
+                        
+                        if var existing = combinedIngredients[key] {
                             existing.quantity += recipeIngredient.quantity
                         } else {
                             combinedIngredients[key] = ShoppingListItemPreview(name: recipeIngredient.name,
                                                                                quantity: recipeIngredient.quantity,
-                                                                               unit: recipeIngredient.unit ?? "",
+                                                                               unit: recipeIngredient.unit,
                                                                                inPantry: inPantry)
                         }
                     }
@@ -107,10 +110,10 @@ struct GenerateShoppingListView: View {
         }
         shoppingListPreview = Array(combinedIngredients.values).sorted { $0.name < $1.name }
     }
-
+    
     private func generateShoppingList() {
         updateShoppingListPreview() // Ensure preview is up-to-date
-
+        
         for itemPreview in shoppingListPreview where !itemPreview.inPantry {
             let newItem = ShoppingListItem(context: viewContext)
             newItem.name = itemPreview.name
@@ -119,7 +122,7 @@ struct GenerateShoppingListView: View {
             newItem.isChecked = false
             newItem.category = "Inne" // TODO: Better category assignment
         }
-
+        
         do {
             try viewContext.save()
             dismiss()

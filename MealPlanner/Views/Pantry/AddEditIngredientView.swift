@@ -92,12 +92,12 @@ struct AddEditIngredientView: View {
         }
     }
 }
-//
-//struct AddEditIngredientView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddEditIngredientView(isNewIngredient: true)
-//            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+
+struct AddEditIngredientView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddEditIngredientView(isNewIngredient: true)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
 
 

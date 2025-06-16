@@ -4,7 +4,7 @@ import CoreData
 struct RecipesView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Recipe.name, ascending: true)],
         animation: .default)
     private var recipes: FetchedResults<Recipe>
 
@@ -71,7 +71,7 @@ struct RecipeRow: View {
         VStack(alignment: .leading) {
             Text(recipe.name)
                 .font(.headline)
-            Text(recipe.category ?? "Brak kategorii")
+            Text(recipe.category)
                 .font(.subheadline)
                 .foregroundColor(.gray)
             Text("Składników: \(recipe.ingredients?.count ?? 0)")

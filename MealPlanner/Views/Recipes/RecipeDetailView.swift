@@ -12,7 +12,7 @@ struct RecipeDetailView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
-                Text("Kategoria: \(recipe.category ?? "Brak")")
+                Text("Kategoria: \(recipe.category)")
                     .font(.subheadline)
                     .foregroundColor(.gray)
 
@@ -30,7 +30,7 @@ struct RecipeDetailView: View {
 
                 if let recipeIngredients = recipe.ingredients as? Set<RecipeIngredient> {
                     ForEach(recipeIngredients.sorted(by: { $0.name < $1.name })) { ingredient in
-                        Text("- \(ingredient.name): \(ingredient.quantity, specifier: "%.0f") \(ingredient.unit ?? "")")
+                        Text("- \(ingredient.name): \(ingredient.quantity, specifier: "%.0f") \(ingredient.unit)")
                     }
                 }
 
@@ -40,7 +40,7 @@ struct RecipeDetailView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                Text(recipe.preparationSteps ?? "Brak kroków przygotowania.")
+                Text(recipe.preparationSteps)
 
                 Divider()
 

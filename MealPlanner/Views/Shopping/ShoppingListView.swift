@@ -5,7 +5,8 @@ import EventKit
 struct ShoppingListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \.category, ascending: true), NSSortDescriptor(keyPath: \.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \ShoppingListItem.category, ascending: true),
+                          NSSortDescriptor(keyPath: \ShoppingListItem.name, ascending: true)],
         animation: .default)
     private var shoppingListItems: FetchedResults<ShoppingListItem>
 
@@ -69,7 +70,7 @@ struct ShoppingListView: View {
     }
 
     private var groupedShoppingListItems: [String: [ShoppingListItem]] {
-        Dictionary(grouping: shoppingListItems) { $0.category ?? "Inne" }
+        Dictionary(grouping: shoppingListItems) { $0.category }
     }
 
     private func deleteShoppingListItem(offsets: IndexSet, category: String) {
@@ -133,7 +134,7 @@ struct ShoppingListItemRow: View {
             }
             .buttonStyle(.plain)
 
-            Text("\(item.name) - \(item.quantity, specifier: "%.0f") \(item.unit ?? "")")
+            Text("\(item.name) - \(item.quantity, specifier: "%.0f") \(item.unit)")
                 .strikethrough(item.isChecked)
                 .foregroundColor(item.isChecked ? .gray : .primary)
 
