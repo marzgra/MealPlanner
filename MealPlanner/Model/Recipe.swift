@@ -1,16 +1,30 @@
+
 import Foundation
 import CoreData
 
 @objc(Recipe)
-public class Recipe: NSManagedObject {}
+public class Recipe: NSManagedObject {
+    @NSManaged public var name: String
+    @NSManaged public var preparationSteps: String
+    @NSManaged public var servings: Int16
+    @NSManaged public var preparationTime: Int16
+    @NSManaged public var category: String
+    @NSManaged public var tags: String?
+    @NSManaged public var ingredients: NSSet?
+}
 
 extension Recipe {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Recipe> {
-        NSFetchRequest<Recipe>(entityName: "Recipe")
-    }
+    @objc(addIngredientsObject:)
+    @NSManaged public func addToIngredients(_ value: RecipeIngredient)
 
-    @NSManaged public var id: UUID
-    @NSManaged public var name: String
-    @NSManaged public var instructions: String?
-    @NSManaged public var ingredients: NSSet? // relacja do RecipeIngredient
+    @objc(removeIngredientsObject:)
+    @NSManaged public func removeFromIngredients(_ value: RecipeIngredient)
+
+    @objc(addIngredients:)
+    @NSManaged public func addToIngredients(_ values: NSSet)
+
+    @objc(removeIngredients:)
+    @NSManaged public func removeFromIngredients(_ values: NSSet)
 }
+
+
